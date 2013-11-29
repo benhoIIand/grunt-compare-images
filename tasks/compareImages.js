@@ -10,20 +10,21 @@
 
 module.exports = function(grunt) {
 
-    var path        = require('path');
-    var cp          = require("child_process");
+    var path = require('path');
+    var cp   = require("child_process");
 
     // Please see the Grunt documentation for more information regarding task
     // creation: http://gruntjs.com/creating-tasks
     grunt.registerMultiTask('compareImages', 'Compare two images and receive a difference back', function() {
-        // Merge task-specific and/or target-specific options with these defaults.
-        var options = this.options({
-            cwd: './images-comaprison',
+        var defaults = {
+            cwd: './images-comparison/',
             sample: 'sample',
             baseline: 'baseline',
             difference: 'difference',
             threshold: '100'
-        });
+        };
+
+        var options = grunt.util._.defaults(defaults, this.options());
 
         var done = this.async();
 
