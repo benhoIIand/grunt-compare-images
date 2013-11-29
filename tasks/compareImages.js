@@ -19,9 +19,9 @@ module.exports = function(grunt) {
         // Merge task-specific and/or target-specific options with these defaults.
         var options = this.options({
             cwd: './',
-            sample: 'sample',
-            baseline: 'baseline',
-            difference: 'difference',
+            sample: 'images-comaprison/sample',
+            baseline: 'images-comaprison/baseline',
+            difference: 'images-comaprison/difference',
             threshold: '100'
         });
 
@@ -51,7 +51,8 @@ module.exports = function(grunt) {
             compareImages(baseline, sample, output, options.threshold, cb);
         }, function() {
             if(errors > 0) {
-                cp.exec("echo \"##teamcity[buildStatus status='SUCCESS' text='IMAGES ARE VISIBLY DIFFERENT. Check artifacts or the build log for the results -->']\"", done);
+                console.log('##teamcity[buildStatus status="SUCCESS" text="IMAGES ARE VISIBLY DIFFERENT. Check artifacts or the build log for the results -->"]');
+                done();
             }
         });
 
@@ -77,7 +78,6 @@ module.exports = function(grunt) {
                 if(err) {
                     errors++;
                 }
-
                 cb();
             });
         }
