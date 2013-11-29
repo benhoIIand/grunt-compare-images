@@ -18,10 +18,10 @@ module.exports = function(grunt) {
     grunt.registerMultiTask('compareImages', 'Compare two images and receive a difference back', function() {
         // Merge task-specific and/or target-specific options with these defaults.
         var options = this.options({
-            cwd: './',
-            sample: 'images-comaprison/sample',
-            baseline: 'images-comaprison/baseline',
-            difference: 'images-comaprison/difference',
+            cwd: './images-comaprison',
+            sample: 'sample',
+            baseline: 'baseline',
+            difference: 'difference',
             threshold: '100'
         });
 
