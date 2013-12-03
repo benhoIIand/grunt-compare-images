@@ -16,21 +16,20 @@ module.exports = function(grunt) {
     // Please see the Grunt documentation for more information regarding task
     // creation: http://gruntjs.com/creating-tasks
     grunt.registerMultiTask('compareImages', 'Compare two images and receive a difference back', function() {
-        var defaults = {
-            cwd: './images-comparison/',
+
+        var options = this.options({
+            cwd: './image-comparison/',
             sample: 'sample',
             baseline: 'baseline',
             difference: 'difference',
             threshold: '100'
-        };
-
-        var options = grunt.util._.defaults(defaults, this.options());
+        });
 
         var done = this.async();
 
-        var sampleDir     = path.normalize(options.cwd + options.sample);
-        var baselineDir   = path.normalize(options.cwd + options.baseline);
-        var differenceDir = path.normalize(options.cwd + options.difference);
+        var sampleDir     = path.normalize(options.cwd +'/'+ options.sample);
+        var baselineDir   = path.normalize(options.cwd +'/'+ options.baseline);
+        var differenceDir = path.normalize(options.cwd +'/'+ options.difference);
 
         var samples = grunt.file.expand({
             cwd: sampleDir
@@ -66,7 +65,7 @@ module.exports = function(grunt) {
             var outputDir = output.split(path.sep);
             outputDir.pop();
             outputDir = outputDir.join(path.sep);
-            grunt.file.mkdir(path.normalize(options.cwd +'/'+ outputDir));
+            grunt.file.mkdir(path.normalize(outputDir));
 
             // Get the absolute paths
             baseline = path.resolve(baseline);

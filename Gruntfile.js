@@ -21,12 +21,20 @@ module.exports = function(grunt) {
 
         // Before generating any new files, remove any previously-created files.
         clean: {
-            tests: ['tmp']
+            tests: ['tmp', 'image-comparison/difference']
         },
 
         // Configuration to be run (and then tested).
         compareImages: {
-            default_options: {}
+            default_options: {},
+            with_options: {
+                options: {
+                    cwd: 'comparison',
+                    sample: 's',
+                    baseline: 'b',
+                    difference: 'd'
+                }
+            }
         },
 
         // Unit tests.
@@ -46,7 +54,7 @@ module.exports = function(grunt) {
 
     // Whenever the "test" task is run, first clean the "tmp" dir, then run this
     // plugin's task(s), then test the result.
-    grunt.registerTask('test', ['clean', 'compareImages', 'nodeunit']);
+    grunt.registerTask('test', ['clean', 'compareImages']);
 
     // By default, lint and run all tests.
     grunt.registerTask('default', ['jshint', 'test']);
