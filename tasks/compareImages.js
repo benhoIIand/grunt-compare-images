@@ -52,7 +52,7 @@ module.exports = function(grunt) {
             compareImages(baseline, sample, output, options.threshold, cb);
         }, function() {
             if(errors > 0) {
-                console.log('"##teamcity[buildStatus status="SUCCESS" text="IMAGES ARE VISIBLY DIFFERENT. Check artifacts or the build log for the results -->"]"');
+                console.log('"##teamcity[buildStatus status=\"SUCCESS\" text=\"IMAGES ARE VISIBLY DIFFERENT. Check artifacts or the build log for the results -->\"]"');
                 done();
             }
         });
