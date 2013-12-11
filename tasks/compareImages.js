@@ -44,10 +44,11 @@ module.exports = function(grunt) {
             sample = path.normalize(sampleDir + '/'+ sample);
 
             if (!grunt.file.exists(baseline)) {
-                console.log('file doesnt exist: ', baseline);
+                console.log('File doesnt exist: ', baseline);
                 return false;
             }
 
+            console.log('Comparing: ', sample);
             compareImages(baseline, sample, output, options.threshold, cb);
         }, function() {
             if(errors > 0) {
