@@ -77,6 +77,7 @@ module.exports = function(grunt) {
 
             cp.exec([exePath, args].join(' '), function (err, stdout, stderr) {
                 if(err) {
+                    console.log('There was a difference with the file:', sample);
                     errors++;
                 }
                 cb();
