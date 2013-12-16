@@ -79,7 +79,11 @@ module.exports = function(grunt) {
                 if(err) {
                     console.log('There was a difference with the file:', sample);
                     errors++;
+                } else {
+                    grunt.file.delete(baseline);
+                    grunt.file.delete(sample);
                 }
+                
                 cb();
             });
         }
