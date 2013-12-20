@@ -13,12 +13,10 @@ module.exports = function(grunt) {
     var path = require('path');
     var cp   = require("child_process");
 
-    // Please see the Grunt documentation for more information regarding task
-    // creation: http://gruntjs.com/creating-tasks
     grunt.registerMultiTask('compareImages', 'Compare two images and receive a difference back', function() {
 
         var options = this.options({
-            cwd: './image-comparison/',
+            cwd: './comparison/',
             sample: 'sample',
             baseline: 'baseline',
             difference: 'difference',
@@ -35,8 +33,6 @@ module.exports = function(grunt) {
             cwd: sampleDir
         }, '**/*.{jpg,png,gif}');
 
-        var errors = 0;
-
         grunt.util.async.forEach(samples, function(sample, cb) {
             var baseline = path.normalize(baselineDir + '/' + sample);
             var output   = path.normalize(differenceDir +'/'+ sample);
@@ -44,49 +40,42 @@ module.exports = function(grunt) {
             sample = path.normalize(sampleDir + '/'+ sample);
 
             if (!grunt.file.exists(baseline)) {
-                console.log('File doesnt exist: ', baseline);
+                grunt.verbose.writeln('File doesnt exist: ', baseline);
+                cb();
                 return false;
             }
-
-            console.log('Comparing: ', sample);
-            compareImages(baseline, sample, output, options.threshold, cb);
-        }, function() {
-            if(errors > 0) {
-                console.log("##teamcity[buildStatus status='SUCCESS' text='IMAGES ARE VISIBLY DIFFERENT. Check artifacts or the build log for the results -->']");
-                done();
-            }
-        });
-
-        function compareImages(baseline, sample, output, threshold, cb) {
-            var exePath = path.normalize(__dirname + '/lib/perceptualdiff.exe');
-
-            var filename = path.basename(sample);
 
             // Create directory
             var outputDir = output.split(path.sep);
             outputDir.pop();
             outputDir = outputDir.join(path.sep);
+
             grunt.file.mkdir(path.normalize(outputDir));
 
-            // Get the absolute paths
-            baseline = path.resolve(baseline);
-            sample   = path.resolve(sample);
-            output   = path.resolve(outputDir) +'/'+ filename;
+            var filename = path.basename(sample);
+            var exePath  = path.normalize(__dirname + '/lib/perceptualdiff.exe');
 
-            var args = '"'+ baseline +'" "'+ sample +'" -output "'+ output +'" -threshold "'+ threshold +'" -verbose';
+            // Get the absolute paths
+            var baselineAbsolute = path.resolve(baseline);
+            var sampleAbsolute   = path.resolve(sample);
+            var outputAbsolute   = path.resolve(outputDir) +'/'+ filename;
+
+            var args = '"'+ baselineAbsolute +'" "'+ sampleAbsolute +'" -output "'+ outputAbsolute +'" -threshold "'+ options.threshold +'" -verbose';
+
+            grunt.verbose.writeln('Comparing:', sample, 'to', baseline);
 
             cp.exec([exePath, args].join(' '), function (err, stdout, stderr) {
                 if(err) {
-                    console.log('There was a difference with the file:', sample);
-                    errors++;
+                    grunt.log.writeln('There was a difference with the file:', sample);
+                    grunt.log.writeln("##teamcity[buildStatus status='SUCCESS' text='IMAGES ARE VISIBLY DIFFERENT. Check artifacts or the build log for the results -->']");
                 } else {
                     grunt.file.delete(baseline);
                     grunt.file.delete(sample);
                 }
-                
+
                 cb();
             });
-        }
+        }, done);
     });
 
 };

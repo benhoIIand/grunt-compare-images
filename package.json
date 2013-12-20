@@ -1,7 +1,7 @@
 {
   "name": "grunt-compare-images",
   "description": "Compare two images and receive a difference back",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "homepage": "https://github.com/hollandben/grunt-compare-images",
   "author": {
     "name": "Ben Holland",
